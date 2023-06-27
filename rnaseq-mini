@@ -1,0 +1,28 @@
+FROM continuumio/miniconda:4.7.10
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV DEBCONF_NONINTERACTIVE_SEEN true
+
+WORKDIR /bin
+
+RUN conda config --set notify_outdated_conda false
+
+#fastqc
+RUN conda install -y -c bioconda fastqc=0.11.7
+
+# picard
+RUN conda install -y -c bioconda picard=2.18.7
+
+# samtools
+RUN conda install -y -c bioconda samtools=1.11
+
+## star
+RUN conda install -y -c bioconda star=2.7.10b
+
+## subread
+#RUN conda install -y -c bioconda subread=2.0.3
+RUN wget --no-check-certificate -O subread-2.0.6-Linux-x86_64.tar.gz https://sourceforge.net/projects/subread/files/subread-2.0.6/subread-2.0.6-Linux-x86_64.tar.gz/download
+RUN tar -xvzf subread-2.0.6-Linux-x86_64.tar.gz
+RUN cp subread-2.0.6-Linux-x86_64/bin/featureCounts .
+
+WORKDIR /data
